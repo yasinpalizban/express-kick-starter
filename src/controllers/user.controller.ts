@@ -5,14 +5,15 @@ import ApiController from './api.controller';
 import { IUser, IUserPagination } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
 import { UserEntity } from '../entities/user.entity';
-import { UrlAggression } from '../libraries/urlAggression';
+import {UserFilter} from "@/filters/UserFilter";
 
 export default class UserController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
       const userService = new UserService();
-      const urlAggression = new UrlAggression(req);
-      const result: IUserPagination = await userService.index(urlAggression);
+      const userFilter = new UserFilter();
+      userFilter.transform(req).navigation(req);
+      const result: IUserPagination = await userService.index(userFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

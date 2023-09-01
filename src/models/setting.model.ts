@@ -1,8 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import { ISetting } from '@/interfaces/setting.interface';
-import { AggregationModel } from '@/models/aggreation.model';
 
-export class SettingModel extends AggregationModel implements ISetting {
+export class SettingModel extends Model<ISetting> implements ISetting {
   public id?: number;
   public key: string;
   public value: string;

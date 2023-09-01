@@ -1,20 +1,20 @@
-import { NextFunction, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { default as i18n } from 'i18next';
+import {NextFunction, Request, Response} from 'express';
+import {StatusCodes} from 'http-status-codes';
+import {default as i18n} from 'i18next';
 import ApiController from '../controllers/api.controller';
-import { IPermissionUser, IPermissionUserPagination } from '../interfaces/permission.user.interface';
+import {IPermissionUser, IPermissionUserPagination} from '../interfaces/permission.user.interface';
 import PermissionUserService from '../services/permission.user.service';
-import { UrlAggression } from '../libraries/urlAggression';
-import { PermissionUserEntity } from '@/entities/permission.user.entity';
+import {PermissionUserEntity} from '@/entities/permission.user.entity';
+import {PermissionUserFilter} from "@/filters/PermissionUserFilter";
 
 export default class PermissionUserController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
       const id: number = req.params.id ? +req.params.id : 0;
       const userPermissionService = new PermissionUserService();
-      const urlQueryParam = new UrlAggression(req);
-
-      const result: IPermissionUserPagination = await userPermissionService.setNestId(id).index(urlQueryParam);
+      const permissionUserFilter = new PermissionUserFilter();
+      permissionUserFilter.transform(req).navigation(req);
+      const result: IPermissionUserPagination = await userPermissionService.setNestId(id).index(permissionUserFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

@@ -4,16 +4,16 @@ import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
 import PermissionService from '../services/permission.service';
 import { IPermission, IPermissionPagination } from '../interfaces/permission.interface';
-import { UrlAggression } from '../libraries/urlAggression';
 import { PermissionEntity } from '@/entities/permission.entity';
+import {PermissionFilter} from "@/filters/PermissionFilter";
 
 export default class PermissionController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
       const permissionService = new PermissionService();
-      const urlQueryParam = new UrlAggression(req);
-
-      const result: IPermissionPagination = await permissionService.index(urlQueryParam);
+      const permissionFilter = new PermissionFilter();
+      permissionFilter.transform(req).navigation(req);
+      const result: IPermissionPagination = await permissionService.index(permissionFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

@@ -2,18 +2,20 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
-import { UrlAggression } from '../libraries/urlAggression';
+
 import { IGroup, IGroupPagination } from '../interfaces/group.interface';
 import GroupService from '../services/group.service';
 import { GroupEntity } from '@/entities/group.entity';
+import {GroupFilter} from "@/filters/GroupFilter";
 
 export default class GroupController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
       const groupService = new GroupService();
-      const urlAggression = new UrlAggression(req);
+      const groupFilter = new GroupFilter();
+      groupFilter.transform(req).navigation(req);
 
-      const result: IGroupPagination = await groupService.index(urlAggression);
+      const result: IGroupPagination = await groupService.index(groupFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

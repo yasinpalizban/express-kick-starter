@@ -1,10 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import { IUser } from '../interfaces/user.interface';
-import {AggregationModel} from "@/models/aggreation.model";
 
-//export type UserCreationAttributes = Optional<IUser, 'login'>;
-
-export class UserModel extends AggregationModel implements IUser {
+export class UserModel extends Model<IUser> implements IUser {
   public id: number;
   public email: string;
   public username: string;

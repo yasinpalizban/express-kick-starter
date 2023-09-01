@@ -2,7 +2,7 @@ import { UrlAggression } from '../libraries/urlAggression';
 
 export declare interface ServiceInterface {
 
-  index?(urlQueryParam?: UrlAggression): Promise<any[] | any>;
+  index?(urlQueryParam?: UrlAggression| any): Promise<any[] | any>;
 
   show?(id: number): Promise<any>;
 

@@ -1,8 +1,8 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import { IPermissionUser } from '../interfaces/permission.user.interface';
-import {AggregationModel} from "@/models/aggreation.model";
 
-export class UserPermissionsModel extends AggregationModel implements IPermissionUser {
+
+export class UserPermissionsModel extends Model<IPermissionUser> implements IPermissionUser {
   id: number;
   actions: string;
   userId: number;

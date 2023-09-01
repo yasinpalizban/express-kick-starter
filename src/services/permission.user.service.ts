@@ -1,14 +1,15 @@
-import { HttpException } from '../exceptions/HttpException';
-import { isEmpty } from '../utils/is.empty';
-import { StatusCodes } from 'http-status-codes';
-import { default as i18n } from 'i18next';
-import { ServiceInterface } from '../interfaces/service.interface';
-import { UrlAggression } from '../libraries/urlAggression';
-import { AggregatePipeLine } from '../interfaces/urlAggressionInterface';
-import { PermissionUserEntity } from '@/entities/permission.user.entity';
-import { IPermissionUser, IPermissionUserPagination } from '@/interfaces/permission.user.interface';
+import {HttpException} from '../exceptions/HttpException';
+import {isEmpty} from '../utils/is.empty';
+import {StatusCodes} from 'http-status-codes';
+import {default as i18n} from 'i18next';
+import {ServiceInterface} from '../interfaces/service.interface';
+import {PermissionUserEntity} from '@/entities/permission.user.entity';
+import {IPermissionUser, IPermissionUserPagination} from '@/interfaces/permission.user.interface';
 import DB from '@/databases/database';
-import { Op, Sequelize } from 'sequelize';
+import {Sequelize} from 'sequelize';
+import {PermissionUserFilter} from "@/filters/PermissionUserFilter";
+import {IPagination} from "@/interfaces/pagination";
+import {paginationFields} from "@/utils/pagntaion.fields";
 
 export default class PermissionUserService implements ServiceInterface {
   public permissionUserModel = DB.permissionUser;
@@ -23,18 +24,27 @@ export default class PermissionUserService implements ServiceInterface {
     return this;
   }
 
-  public async index(urlQueryParam: UrlAggression): Promise<IPermissionUserPagination> {
-    const defaultPipeline: AggregatePipeLine = {
-      attributes: [
-        'id',
-        'actions',
-        'userId',
-        'permissionId',
-        [Sequelize.literal('`PermissionsModel`.`name`'), 'permission'],
-        [Sequelize.literal('`UserModel`.`last_name`'), 'lastName'],
-        [Sequelize.literal('`UserModel`.`first_name`'), 'firstName'],
-        [Sequelize.literal('`UserModel`.`username`'), 'username'],
-      ],
+  public async index(permissionUserFilter: PermissionUserFilter): Promise<IPermissionUserPagination> {
+
+    const whereCluase = (this.nestId != 0) ? {permissionId: this.nestId} : permissionUserFilter.whereStatement;
+
+    const select = isEmpty(permissionUserFilter.filed) ? [
+      'id',
+      'actions',
+      'userId',
+      'permissionId',
+      [Sequelize.literal('`PermissionsModel`.`name`'), 'permission'],
+      [Sequelize.literal('`UserModel`.`last_name`'), 'lastName'],
+      [Sequelize.literal('`UserModel`.`first_name`'), 'firstName'],
+      [Sequelize.literal('`UserModel`.`username`'), 'username'],
+    ] : permissionUserFilter.filed;
+
+    const {count, rows} = await this.permissionUserModel.findAndCountAll({
+      limit: permissionUserFilter.limit,
+      offset: permissionUserFilter.page,
+      order: [[permissionUserFilter.sort, permissionUserFilter.order]],
+      attributes: select,
+      where: whereCluase,
       include: [
         {
           model: DB.permission,
@@ -44,21 +54,19 @@ export default class PermissionUserService implements ServiceInterface {
           model: DB.users,
           attributes: [],
         },
-      ],
-    };
-    if (this.nestId != 0) {
-      defaultPipeline.where = { permissionId: this.nestId };
-    }
-    const pipeLine: AggregatePipeLine = urlQueryParam.decodeQueryParam().getPipeLine(defaultPipeline);
-    const { data, pagination }: IPermissionUserPagination = await this.permissionUserModel.prototype.aggregatePagination(this.permissionUserModel.name, pipeLine);
-    return { data, pagination };
+      ]
+
+    });
+    const paginate: IPagination = paginationFields(permissionUserFilter.limit, permissionUserFilter.page, count);
+    return {data: rows, pagination: paginate};
+
   }
 
   public async show(id: number): Promise<IPermissionUser[]> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.validation'));
 
     const data: IPermissionUser[] = await this.permissionUserModel.findAll({
-      where: { id: id },
+      where: {id: id},
       attributes: [
         'id',
         'actions',
@@ -97,12 +105,12 @@ export default class PermissionUserService implements ServiceInterface {
 
   public async update(id: number, userPermissionEntity: PermissionUserEntity): Promise<void> {
     if (isEmpty(userPermissionEntity) && isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.validation'));
-    await this.permissionUserModel.update(userPermissionEntity, { where: { id: id } });
+    await this.permissionUserModel.update(userPermissionEntity, {where: {id: id}});
   }
 
   public async delete(id: number): Promise<void> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.reject'));
 
-    await this.permissionUserModel.destroy({ where: { id: id } });
+    await this.permissionUserModel.destroy({where: {id: id}});
   }
 }

@@ -12,7 +12,6 @@ import { permissionUserModel } from '../models/user.permission.model';
 import { ipActivityModel } from '../models/ip.activity.model';
 
 import { NODE_ENV, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE, DB_Pool_Max, DB_Pool_Min} from '../configs/config';
-import { aggregationModel } from '../models/aggreation.model';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
  // host: 'mysql' for docker compouse,
@@ -40,7 +39,6 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
 sequelize.authenticate();
 
 const DB = {
-  aggregation: aggregationModel(sequelize),
   users: userModel(sequelize),
   setting: settingModel(sequelize),
   group: groupModel(sequelize),

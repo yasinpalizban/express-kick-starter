@@ -1,8 +1,8 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import { IUserGroup } from '../interfaces/group.user.interface';
-import {AggregationModel} from "@/models/aggreation.model";
 
-export class UserGroupModel extends AggregationModel implements IUserGroup {
+
+export class UserGroupModel extends Model<IUserGroup> implements IUserGroup {
   userId: number;
   id?: number;
   groupId: number;

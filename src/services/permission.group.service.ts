@@ -5,10 +5,12 @@ import { default as i18n } from 'i18next';
 import DB from '@/databases/database';
 import { ServiceInterface } from '../interfaces/service.interface';
 import { IPermissionGroup, IPermissionGroupPagination } from '../interfaces/permission.group.interface';
-import { UrlAggression } from '../libraries/urlAggression';
-import { AggregatePipeLine } from '../interfaces/urlAggressionInterface';
+
 import { PermissionGroupEntity } from '@/entities/permission.group.entity';
 import Sequelize, { Op } from 'sequelize';
+import {PermissionGroupFilter} from "@/filters/PermissionGroupFilter";
+import {IPagination} from "@/interfaces/pagination";
+import {paginationFields} from "@/utils/pagntaion.fields";
 
 export default class PermissionGroupService implements ServiceInterface {
   public permissionGroupModel = DB.permissionGroup;
@@ -23,16 +25,25 @@ export default class PermissionGroupService implements ServiceInterface {
     return this;
   }
 
-  public async index(urlQueryParam: UrlAggression): Promise<IPermissionGroupPagination> {
-    const defaultPipeline: AggregatePipeLine = {
-      attributes: [
-        'id',
-        'actions',
-        'groupId',
-        'permissionId',
-        [Sequelize.literal('`PermissionsModel`.`name`'), 'permission'],
-        [Sequelize.literal('`GroupModel`.`name`'), 'group'],
-      ],
+  public async index(permissionGroupFilter: PermissionGroupFilter): Promise<IPermissionGroupPagination> {
+
+    const whereCluase = (this.nestId != 0) ? {permissionId: this.nestId} : permissionGroupFilter.whereStatement;
+
+    const select = isEmpty(permissionGroupFilter.filed) ? [
+      'id',
+      'actions',
+      'groupId',
+      'permissionId',
+      [Sequelize.literal('`PermissionsModel`.`name`'), 'permission'],
+      [Sequelize.literal('`GroupModel`.`name`'), 'group'],
+    ] : permissionGroupFilter.filed;
+
+    const {count, rows} = await this.permissionGroupModel.findAndCountAll({
+      limit: permissionGroupFilter.limit,
+      offset: permissionGroupFilter.page,
+      order: [[permissionGroupFilter.sort, permissionGroupFilter.order]],
+      attributes: select,
+      where: whereCluase,
       include: [
         {
           model: DB.permission,
@@ -42,16 +53,11 @@ export default class PermissionGroupService implements ServiceInterface {
           model: DB.group,
           attributes: [],
         },
-      ],
-    };
+      ]
 
-    if (this.nestId != 0) {
-      defaultPipeline.where = { permissionId: this.nestId };
-    }
-
-    const pipeLine: AggregatePipeLine = urlQueryParam.decodeQueryParam().getPipeLine(defaultPipeline);
-    const { data, pagination }: IPermissionGroupPagination = await this.permissionGroupModel.prototype.aggregatePagination(this.permissionGroupModel.name, pipeLine);
-    return { data, pagination };
+    });
+    const paginate: IPagination = paginationFields(permissionGroupFilter.limit, permissionGroupFilter.page, count);
+    return {data: rows, pagination: paginate};
   }
 
   public async show(id: number): Promise<IPermissionGroup[]> {

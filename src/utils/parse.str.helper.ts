@@ -1,38 +1,24 @@
-import { SignType } from '../enums/sign.enum';
-import { SearchFunctionType } from '../enums/search.function';
-import { AggregatePipeLine } from '../interfaces/urlAggressionInterface';
-import { Op } from 'sequelize';
+import {Op} from 'sequelize';
+
 export function convertSignType(sign: string | string[], value: number | string | string[] | number[]): any {
   switch (sign) {
     case '!=':
-      return { [Op.ne]: value };
+      return {[Op.ne]: value};
     case '>':
-      return { [Op.gt]: value };
+      return {[Op.gt]: value};
     case '=>':
-      return { [Op.gte]: value };
+      return {[Op.gte]: value};
     case '<':
-      return { [Op.lt]: value };
+      return {[Op.lt]: value};
     case '=<':
-      return { [Op.lte]: value };
+      return {[Op.lte]: value};
+    case '=':
+      return {[Op.eq]: value};
     default:
-      return { [Op.eq]: value };
+      return {[Op.like]: '%' + value + '%'};
   }
 }
 
-export function convertFunctionType(name: string): string {
-  switch (name) {
-    case 'orWhere':
-      return SearchFunctionType.orWhere;
-    case 'whereNotIn':
-      return SearchFunctionType.whereNoTIn;
-    case 'whereIn':
-      return SearchFunctionType.whereIn;
-    case 'like':
-      return SearchFunctionType.like;
-    default:
-      return SearchFunctionType.where;
-  }
-}
 
 export function parseString(str: string): string {
   // %
@@ -50,21 +36,7 @@ export function changeKeyObject(obj: object, oldKey: string, newKey: string): ob
   return JSON.parse(JSON.stringify(obj).split(oldKey).join(newKey));
 }
 
-export function comparePipeLine(key: string, pipeline: AggregatePipeLine[], defaultPipeLine: AggregatePipeLine[]) {
-  pipeline.forEach(p => {
-    if (p[key]) {
-      defaultPipeLine.forEach(dp => {
-        if (dp[key]) {
-        }
-      });
-    }
-  });
-}
 
 
-export function copyObject(obj1: object, obj2: object) {
-  if( obj1){
 
-  }
 
-}

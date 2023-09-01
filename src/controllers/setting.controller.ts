@@ -5,14 +5,16 @@ import ApiController from './api.controller';
 import SettingService from '../services/setting.service';
 import { ISetting, ISettingPagination } from '../interfaces/setting.interface';
 import { SettingEntity } from '../entities/setting.entity';
-import { UrlAggression } from '../libraries/urlAggression';
+import {SettingFilter} from "@/filters/SettingFilter";
+
 
 export default class SettingController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
       const settingService = new SettingService();
-      const urlAggression = new UrlAggression(req);
-      const result: ISettingPagination = await settingService.index(urlAggression);
+      const settingFilter = new SettingFilter();
+      settingFilter.transform(req).navigation(req);
+      const result: ISettingPagination = await settingService.index(settingFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

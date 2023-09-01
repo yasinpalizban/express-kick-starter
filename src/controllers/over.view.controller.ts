@@ -3,18 +3,18 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
 import { IUserPagination } from '../interfaces/user.interface';
-import { UrlAggression } from '../libraries/urlAggression';
+
 import UserService from '../services/user.service';
+import {UserFilter} from "@/filters/UserFilter";
 
 
 export default class OverViewController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
-      const urlAggression = new UrlAggression(req);
+      const userFilter = new UserFilter();
+      userFilter.navigation(req);
       const userService = new UserService();
-      const users: IUserPagination = await userService.index(urlAggression);
-      urlAggression.resetPipeLine();
-      urlAggression.resetPipeLine();
+      const users: IUserPagination = await userService.index(userFilter);
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),
         userPost: users.data,

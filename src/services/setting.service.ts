@@ -1,26 +1,36 @@
-import { HttpException } from '../exceptions/HttpException';
-import { isEmpty } from '../utils/is.empty';
-import { StatusCodes } from 'http-status-codes';
-import { default as i18n } from 'i18next';
-import { ISetting, ISettingPagination } from '../interfaces/setting.interface';
-import { ServiceInterface } from '../interfaces/service.interface';
-import { UrlAggression } from '../libraries/urlAggression';
-import { AggregatePipeLine } from '../interfaces/urlAggressionInterface';
+import {HttpException} from '../exceptions/HttpException';
+import {isEmpty} from '../utils/is.empty';
+import {StatusCodes} from 'http-status-codes';
+import {default as i18n} from 'i18next';
+import {ISetting, ISettingPagination} from '../interfaces/setting.interface';
+import {ServiceInterface} from '../interfaces/service.interface';
 import DB from '@/databases/database';
-import { SettingEntity } from '../entities/setting.entity';
+import {SettingEntity} from '../entities/setting.entity';
+import {SettingFilter} from "@/filters/SettingFilter";
+import {IPagination} from "@/interfaces/pagination";
+import {paginationFields} from "@/utils/pagntaion.fields";
 
 export default class SettingService implements ServiceInterface {
   public settingModel = DB.setting;
 
-  public async index(urlQueryParam: UrlAggression): Promise<ISettingPagination> {
-    const pipeLine: AggregatePipeLine = urlQueryParam.decodeQueryParam().getPipeLine();
-    const { data, pagination }: ISettingPagination = await this.settingModel.prototype.aggregatePagination(this.settingModel.name, pipeLine);
-    return { data, pagination };
+  public async index(settingFilter: SettingFilter): Promise<ISettingPagination> {
+    const select = isEmpty(settingFilter.filed) ? null : settingFilter.filed;
+
+    const { count, rows } = await this.settingModel.findAndCountAll({
+      limit: settingFilter.limit,
+      offset: settingFilter.page,
+      order: [[settingFilter.sort, settingFilter.order]],
+      attributes: select,
+      where: settingFilter.whereStatement,
+
+    });
+    const paginate: IPagination = paginationFields(settingFilter.limit, settingFilter.page, count);
+    return { data: rows, pagination: paginate };
   }
 
   public async show(id: number): Promise<ISetting[]> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.validation'));
-    const dataById: ISetting[] = await this.settingModel.findAll({ where: { id: id } });
+    const dataById: ISetting[] = await this.settingModel.findAll({where: {id: id}});
     if (!dataById) throw new HttpException(StatusCodes.CONFLICT, i18n.t('api.commons.exist'));
     return dataById;
   }
@@ -36,12 +46,12 @@ export default class SettingService implements ServiceInterface {
   public async update(id: number, settingEntity: SettingEntity): Promise<void> {
     if (isEmpty(settingEntity)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.reject'));
 
-    await this.settingModel.update(settingEntity, { where: { id: id } });
+    await this.settingModel.update(settingEntity, {where: {id: id}});
   }
 
   public async delete(id: number): Promise<void> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.reject'));
 
-    await this.settingModel.destroy({ where: { id: id } });
+    await this.settingModel.destroy({where: {id: id}});
   }
 }
