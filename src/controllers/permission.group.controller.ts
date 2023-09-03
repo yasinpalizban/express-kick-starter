@@ -5,7 +5,7 @@ import ApiController from '../controllers/api.controller';
 import PermissionGroupService from '../services/permission.group.service';
 import {IPermissionGroup, IPermissionGroupPagination} from '../interfaces/permission.group.interface';
 import {PermissionGroupEntity} from '@/entities/permission.group.entity';
-import {PermissionGroupFilter} from "@/filters/PermissionGroupFilter";
+import {PermissionGroupFilter} from "@/filters/permission.group.filter";
 
 export default class PermissionGroupController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {

@@ -5,7 +5,7 @@ import ApiController from '../controllers/api.controller';
 import PermissionService from '../services/permission.service';
 import { IPermission, IPermissionPagination } from '../interfaces/permission.interface';
 import { PermissionEntity } from '@/entities/permission.entity';
-import {PermissionFilter} from "@/filters/PermissionFilter";
+import {PermissionFilter} from "@/filters/permission.filter";
 
 export default class PermissionController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {

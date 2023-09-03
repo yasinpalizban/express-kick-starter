@@ -5,7 +5,7 @@ import ApiController from './api.controller';
 import SettingService from '../services/setting.service';
 import { ISetting, ISettingPagination } from '../interfaces/setting.interface';
 import { SettingEntity } from '../entities/setting.entity';
-import {SettingFilter} from "@/filters/SettingFilter";
+import {SettingFilter} from "@/filters/setting.filter";
 
 
 export default class SettingController extends ApiController {

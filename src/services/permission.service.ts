@@ -6,7 +6,7 @@ import { IPermission, IPermissionPagination } from '../interfaces/permission.int
 import { ServiceInterface } from '../interfaces/service.interface';
 import DB from '@/databases/database';
 import { PermissionEntity } from '@/entities/permission.entity';
-import {PermissionFilter} from "@/filters/PermissionFilter";
+import {PermissionFilter} from "@/filters/permission.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 

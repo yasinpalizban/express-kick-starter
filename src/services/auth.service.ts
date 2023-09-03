@@ -34,7 +34,6 @@ import DB from '@/databases/database';
 import { AuthEntity } from '../entities/auth.entity';
 import { IUserGroup } from '@/interfaces/group.user.interface';
 import { getDateNow } from '@/utils/get.date.now';
-import { AggregatePipeLine } from '@/interfaces/urlAggressionInterface';
 import Sequelize from 'sequelize';
 
 export default class AuthService implements AuthServiceInterface {
@@ -186,7 +185,8 @@ export default class AuthService implements AuthServiceInterface {
     const tokenData: TokenData = this.createToken(findUser, entity.remember ?? false);
     const cookie = this.createCookie(tokenData);
     const permissions: IPermission[] = await this.permissionModel.findAll({ where: { active: true } });
-    const userPermissionPipeLine: AggregatePipeLine = {
+
+    const permissionUser: IPermissionUser[] = await this.userPermissionModel.findAll({
       where: { userId: findUser.id },
       attributes: ['id', 'actions', 'userId', 'permissionId', [Sequelize.literal('`PermissionsModel`.`name`'), 'permission']],
       include: [
@@ -195,9 +195,10 @@ export default class AuthService implements AuthServiceInterface {
           attributes: [],
         },
       ],
-    };
-    const permissionUser: IPermissionUser[] = await this.userPermissionModel.findAll(userPermissionPipeLine);
-    const groupPermissionPipeLine: AggregatePipeLine = {
+    });
+
+
+    const permissionGroup: IPermissionGroup[] = await this.groupPermissionModel.findAll({
       where: { groupId: userGroup.groupId },
       attributes: ['id', 'actions', 'groupId', 'permissionId', [Sequelize.literal('`PermissionsModel`.`name`'), 'permission']],
       include: [
@@ -206,9 +207,7 @@ export default class AuthService implements AuthServiceInterface {
           attributes: [],
         },
       ],
-    };
-
-    const permissionGroup: IPermissionGroup[] = await this.groupPermissionModel.findAll(groupPermissionPipeLine);
+    });
 
     return {
       cookie: cookie,

@@ -6,7 +6,7 @@ import {ServiceInterface} from '../interfaces/service.interface';
 import {IGroup, IGroupPagination} from '../interfaces/group.interface';
 import DB from '@/databases/database';
 import {GroupEntity} from '@/entities/group.entity';
-import {GroupFilter} from "@/filters/GroupFilter";
+import {GroupFilter} from "@/filters/group.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 

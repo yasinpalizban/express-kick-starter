@@ -1,7 +1,7 @@
-import { IPagination } from '../interfaces/pagination';
+import {IPagination} from '../interfaces/pagination';
 
 export function paginationFields(limit: number, nowPage: number, total: number): IPagination {
-
+  nowPage = Math.floor(nowPage / limit);
   const pages: number = Math.ceil(total / limit);
   return {
     hasMore: pages > nowPage,

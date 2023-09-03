@@ -8,7 +8,7 @@ import { IPermissionGroup, IPermissionGroupPagination } from '../interfaces/perm
 
 import { PermissionGroupEntity } from '@/entities/permission.group.entity';
 import Sequelize, { Op } from 'sequelize';
-import {PermissionGroupFilter} from "@/filters/PermissionGroupFilter";
+import {PermissionGroupFilter} from "@/filters/permission.group.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 

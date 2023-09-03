@@ -1,6 +1,6 @@
 import { HomeServiceInterface } from '@/interfaces/home.service.interface';
 import DB from '@/databases/database';
-import { AggregatePipeLine } from '@/interfaces/urlAggressionInterface';
+
 import Sequelize from 'sequelize';
 
 export class HomeService implements HomeServiceInterface {

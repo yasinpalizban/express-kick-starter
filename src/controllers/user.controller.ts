@@ -5,7 +5,7 @@ import ApiController from './api.controller';
 import { IUser, IUserPagination } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
 import { UserEntity } from '../entities/user.entity';
-import {UserFilter} from "@/filters/UserFilter";
+import {UserFilter} from "@/filters/user.filter";
 
 export default class UserController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {

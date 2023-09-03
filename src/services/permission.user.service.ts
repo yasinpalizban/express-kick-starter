@@ -7,7 +7,7 @@ import {PermissionUserEntity} from '@/entities/permission.user.entity';
 import {IPermissionUser, IPermissionUserPagination} from '@/interfaces/permission.user.interface';
 import DB from '@/databases/database';
 import {Sequelize} from 'sequelize';
-import {PermissionUserFilter} from "@/filters/PermissionUserFilter";
+import {PermissionUserFilter} from "@/filters/permission.user.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 

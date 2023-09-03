@@ -2,7 +2,7 @@ import {Request} from 'express';
 import * as URL from 'url';
 import {UrlWithStringQuery} from 'url';
 import queryString from 'query-string';
-import {QueryFilterInterface, QueryUrl} from "@/interfaces/QueryFilterInterface";
+import {QueryFilterInterface, QueryUrl} from "@/interfaces/query.filter.interface";
 import {changeKeyObject, convertSignType} from "@/utils/parse.str.helper";
 
 export class QueryFilter implements QueryFilterInterface {

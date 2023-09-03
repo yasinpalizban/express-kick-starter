@@ -8,7 +8,7 @@ import {ServiceInterface} from '../interfaces/service.interface';
 import DB from '@/databases/database';
 import {IUserGroup} from '@/interfaces/group.user.interface';
 import Sequelize from 'sequelize';
-import {UserFilter} from "@/filters/UserFilter";
+import {UserFilter} from "@/filters/user.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 

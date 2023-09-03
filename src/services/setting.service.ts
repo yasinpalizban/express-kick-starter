@@ -6,7 +6,7 @@ import {ISetting, ISettingPagination} from '../interfaces/setting.interface';
 import {ServiceInterface} from '../interfaces/service.interface';
 import DB from '@/databases/database';
 import {SettingEntity} from '../entities/setting.entity';
-import {SettingFilter} from "@/filters/SettingFilter";
+import {SettingFilter} from "@/filters/setting.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 

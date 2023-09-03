@@ -1,4 +1,4 @@
-import {QueryFilter} from "@/libraries/QueryFilter";
+import {QueryFilter} from "@/libraries/query.filter";
 
 export class UserFilter extends QueryFilter {
 
