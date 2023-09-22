@@ -32,7 +32,7 @@ export default class PermissionGroupController extends ApiController {
       const id: number = +req.params.id;
 
       const groupPermissionService = new PermissionGroupService();
-      const findOneData: IPermissionGroup[] = await groupPermissionService.show(id);
+      const findOneData: IPermissionGroup = await groupPermissionService.show(id);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

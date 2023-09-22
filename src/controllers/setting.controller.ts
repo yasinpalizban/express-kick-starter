@@ -30,7 +30,7 @@ export default class SettingController extends ApiController {
     try {
       const id: number = +req.params.id;
       const settingService = new SettingService();
-      const findOneData: ISetting[] = await settingService.show(id);
+      const findOneData: ISetting = await settingService.show(id);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

@@ -31,7 +31,7 @@ export default class GroupController extends ApiController {
     try {
       const id: number = +req.params.id;
       const groupService = new GroupService();
-      const findOneData: IGroup[] = await groupService.show(id);
+      const findOneData: IGroup = await groupService.show(id);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

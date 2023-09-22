@@ -29,7 +29,7 @@ export default class UserController extends ApiController {
     try {
       const id: number = +req.params.id;
       const userService = new UserService();
-      const findOneData: IUser[] = await userService.show(id);
+      const findOneData: IUser = await userService.show(id);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

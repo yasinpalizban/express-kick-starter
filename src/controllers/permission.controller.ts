@@ -29,7 +29,7 @@ export default class PermissionController extends ApiController {
     try {
       const id: number = +req.params.id;
       const permissionService = new PermissionService();
-      const findOneData: IPermission[] = await permissionService.show(id);
+      const findOneData: IPermission = await permissionService.show(id);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

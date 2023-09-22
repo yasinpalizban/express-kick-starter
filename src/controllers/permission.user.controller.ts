@@ -31,7 +31,7 @@ export default class PermissionUserController extends ApiController {
       const id: number = +req.params.id;
       const userPermissionService = new PermissionUserService();
 
-      const findOneData: IPermissionUser[] = await userPermissionService.show(id);
+      const findOneData: IPermissionUser = await userPermissionService.show(id);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

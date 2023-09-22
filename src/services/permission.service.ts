@@ -29,10 +29,10 @@ export default class PermissionService implements ServiceInterface {
 
   }
 
-  public async show(id: number): Promise<IPermission[]> {
+  public async show(id: number): Promise<IPermission> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.validation'));
 
-    const dataById: IPermission[] = await this.permissionModel.findAll({ where: { id: id } });
+    const dataById: IPermission = await this.permissionModel.findOne({ where: { id: id } });
     if (!dataById) throw new HttpException(StatusCodes.CONFLICT, i18n.t('api.commons.exist'));
     return dataById;
   }

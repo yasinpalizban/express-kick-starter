@@ -29,9 +29,9 @@ export default class GroupService implements ServiceInterface {
     return {data: rows, pagination: paginate};
   }
 
-  public async show(id: number): Promise<IGroup[]> {
+  public async show(id: number): Promise<IGroup> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.validation'));
-    const dataById: IGroup[] = await this.groupModel.findAll({where: {id: id}});
+    const dataById: IGroup = await this.groupModel.findOne({where: {id: id}});
     if (!dataById) throw new HttpException(StatusCodes.CONFLICT, i18n.t('api.commons.exist'));
     return dataById;
   }

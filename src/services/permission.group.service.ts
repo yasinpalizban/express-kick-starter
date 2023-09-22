@@ -60,10 +60,10 @@ export default class PermissionGroupService implements ServiceInterface {
     return {data: rows, pagination: paginate};
   }
 
-  public async show(id: number): Promise<IPermissionGroup[]> {
+  public async show(id: number): Promise<IPermissionGroup> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.validation'));
 
-    const data: IPermissionGroup[] = await this.permissionGroupModel.findAll({
+    const data: IPermissionGroup = await this.permissionGroupModel.findOne({
       where: { id: id },
       attributes: [
         'id',

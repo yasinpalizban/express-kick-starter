@@ -68,7 +68,7 @@ export default class UserService implements ServiceInterface {
     return {data: rows, pagination: paginate};
   }
 
-  public async show(id: number): Promise<IUser[]> {
+  public async show(id: number): Promise<IUser> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.reject'));
 
 
@@ -111,7 +111,7 @@ export default class UserService implements ServiceInterface {
     });
 
     if (!dataById) throw new HttpException(StatusCodes.CONFLICT, i18n.t('api.commons.exist'));
-    return [dataById];
+    return dataById;
   }
 
   public async create(userEntity: UserEntity): Promise<void> {

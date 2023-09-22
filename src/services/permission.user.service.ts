@@ -62,10 +62,10 @@ export default class PermissionUserService implements ServiceInterface {
 
   }
 
-  public async show(id: number): Promise<IPermissionUser[]> {
+  public async show(id: number): Promise<IPermissionUser> {
     if (isEmpty(id)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.validation'));
 
-    const data: IPermissionUser[] = await this.permissionUserModel.findAll({
+    const data: IPermissionUser = await this.permissionUserModel.findOne({
       where: {id: id},
       attributes: [
         'id',
