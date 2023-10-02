@@ -2,10 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from './api.controller';
-import { IUser, IUserPagination } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
 import { UserEntity } from '../entities/user.entity';
 import {UserFilter} from "@/filters/user.filter";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class UserController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
@@ -13,7 +14,7 @@ export default class UserController extends ApiController {
       const userService = new UserService();
       const userFilter = new UserFilter();
       userFilter.transform(req).navigation(req);
-      const result: IUserPagination = await userService.index(userFilter);
+      const result: IPaginateResponse<IUser> = await userService.index(userFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

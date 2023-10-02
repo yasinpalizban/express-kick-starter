@@ -1,4 +1,3 @@
-import { IPagination } from './pagination';
 
 export interface IUser {
   id?: number;
@@ -31,7 +30,3 @@ export interface IUser {
   bio: string;
 }
 
-export interface IUserPagination {
-  data: IUser[];
-  pagination?: IPagination;
-}

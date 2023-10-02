@@ -1,4 +1,3 @@
-import { IPagination } from './pagination';
 
 export interface ISetting {
   id?: number;
@@ -11,8 +10,4 @@ export interface ISetting {
   deletedAt: Date;
 }
 
-export interface ISettingPagination {
-  data: ISetting[];
-  pagination?: IPagination;
-}
 

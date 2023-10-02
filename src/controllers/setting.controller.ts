@@ -3,9 +3,10 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from './api.controller';
 import SettingService from '../services/setting.service';
-import { ISetting, ISettingPagination } from '../interfaces/setting.interface';
+import { ISetting } from '../interfaces/setting.interface';
 import { SettingEntity } from '../entities/setting.entity';
 import {SettingFilter} from "@/filters/setting.filter";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 
 export default class SettingController extends ApiController {
@@ -14,7 +15,7 @@ export default class SettingController extends ApiController {
       const settingService = new SettingService();
       const settingFilter = new SettingFilter();
       settingFilter.transform(req).navigation(req);
-      const result: ISettingPagination = await settingService.index(settingFilter);
+      const result: IPaginateResponse<ISetting> = await settingService.index(settingFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

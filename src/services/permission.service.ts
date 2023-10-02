@@ -2,18 +2,19 @@ import { HttpException } from '../exceptions/HttpException';
 import { isEmpty } from '../utils/is.empty';
 import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
-import { IPermission, IPermissionPagination } from '../interfaces/permission.interface';
+import { IPermission } from '../interfaces/permission.interface';
 import { ServiceInterface } from '../interfaces/service.interface';
 import DB from '@/databases/database';
 import { PermissionEntity } from '@/entities/permission.entity';
 import {PermissionFilter} from "@/filters/permission.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class PermissionService implements ServiceInterface {
   public permissionModel = DB.permission;
 
-  public async index(permissionFilter: PermissionFilter): Promise<IPermissionPagination> {
+  public async index(permissionFilter: PermissionFilter): Promise<IPaginateResponse<IPermission>> {
     const select = isEmpty(permissionFilter.filed) ? null : permissionFilter.filed;
 
     const {count, rows} = await this.permissionModel.findAndCountAll({

@@ -3,17 +3,18 @@ import {isEmpty} from '../utils/is.empty';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import {ServiceInterface} from '../interfaces/service.interface';
-import {IGroup, IGroupPagination} from '../interfaces/group.interface';
+import {IGroup} from '../interfaces/group.interface';
 import DB from '@/databases/database';
 import {GroupEntity} from '@/entities/group.entity';
 import {GroupFilter} from "@/filters/group.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class GroupService implements ServiceInterface {
   public groupModel = DB.group;
 
-  public async index(groupFilter: GroupFilter): Promise<IGroupPagination> {
+  public async index(groupFilter: GroupFilter): Promise<IPaginateResponse<IGroup>> {
 
     const select = isEmpty(groupFilter.filed) ? null : groupFilter.filed;
 

@@ -2,10 +2,11 @@ import {NextFunction, Request, Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import ApiController from '../controllers/api.controller';
-import {IPermissionUser, IPermissionUserPagination} from '../interfaces/permission.user.interface';
+import {IPermissionUser} from '../interfaces/permission.user.interface';
 import PermissionUserService from '../services/permission.user.service';
 import {PermissionUserEntity} from '@/entities/permission.user.entity';
 import {PermissionUserFilter} from "@/filters/permission.user.filter";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class PermissionUserController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
@@ -14,8 +15,7 @@ export default class PermissionUserController extends ApiController {
       const userPermissionService = new PermissionUserService();
       const permissionUserFilter = new PermissionUserFilter();
       permissionUserFilter.transform(req).navigation(req);
-      const result: IPermissionUserPagination = await userPermissionService.setNestId(id).index(permissionUserFilter);
-
+      const result: IPaginateResponse<IPermissionUser> = await userPermissionService.setNestId(id).index(permissionUserFilter);
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),
         data: result.data,

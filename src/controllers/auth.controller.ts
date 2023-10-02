@@ -1,21 +1,21 @@
-import { NextFunction, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { default as i18n } from 'i18next';
-import { RequestWithUser } from '../interfaces/reqeust.with.user.interface';
-import { IUser } from '../interfaces/user.interface';
+import {NextFunction, Request, Response} from 'express';
+import {StatusCodes} from 'http-status-codes';
+import {default as i18n} from 'i18next';
+import {RequestWithUser} from '../interfaces/reqeust.with.user.interface';
+import {IUser} from '../interfaces/user.interface';
 import AuthService from '../services/auth.service';
 
-import { AuthControllerInterface } from '../interfaces/auth.controller.interface';
-import { ILogIn } from '../interfaces/Log.in.interface';
+import {AuthControllerInterface} from '../interfaces/auth.controller.interface';
+import {ILogIn} from '../interfaces/Log.in.interface';
 import requestIp from 'request-ip';
-import { authConfig } from '../configs/auth.config';
+import {authConfig} from '../configs/auth.config';
 import fetch from 'isomorphic-fetch';
-import { AuthEntity } from '@/entities/auth.entity';
+import {AuthEntity} from '@/entities/auth.entity';
 import Pusher from 'pusher';
-import { sharedConfig } from '@/configs/shared.config';
-import { IPusherNotification } from '@/interfaces/pusher.message';
-import { NotificationType } from '@/enums/notification.type.enum';
-import { getDateNow } from '@/utils/get.date.now';
+import {sharedConfig} from '@/configs/shared.config';
+import {IPusherNotification} from '@/interfaces/pusher.message';
+import {NotificationType} from '@/enums/notification.type.enum';
+import {getDateNow} from '@/utils/get.date.now';
 
 export default class AuthController implements AuthControllerInterface {
   public signUp = async function (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
@@ -24,7 +24,7 @@ export default class AuthController implements AuthControllerInterface {
       await authEntity.signUpMode().createNow().generateActivateToken().activateExpiration().generatePasswordHash();
 
 
-      if(!authEntity.email || !authEntity.phone){
+      if (!authEntity.email || !authEntity.phone) {
         return res.status(StatusCodes.NOT_ACCEPTABLE).json({
           statusMessage: i18n.t('auth.youPhoneOrEmail'),
         });
@@ -94,13 +94,15 @@ export default class AuthController implements AuthControllerInterface {
       res.setHeader('Set-Cookie', [isLogIn.cookie]);
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('auth.singIn'),
-        role: isLogIn.role,
-        permissions: isLogIn.permissions,
-        permissionUser: isLogIn.permissionUser,
-        permissionGroup: isLogIn.permissionGroup,
-        userInformation: isLogIn.userInformation,
-        csrf: isLogIn.csrf,
-        jwt: isLogIn.jwt,
+        data: {
+          role: isLogIn.role,
+          permissions: isLogIn.permissions,
+          permissionUser: isLogIn.permissionUser,
+          permissionGroup: isLogIn.permissionGroup,
+          userInformation: isLogIn.userInformation,
+          csrf: isLogIn.csrf,
+          jwt: isLogIn.jwt,
+        },
       });
     } catch (error) {
       next(error);

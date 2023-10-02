@@ -1,4 +1,3 @@
-import { IPagination } from './pagination';
 
 export interface IUserGroup {
   id?: number;
@@ -6,7 +5,3 @@ export interface IUserGroup {
   groupId: number;
 }
 
-export interface IUserGroupPagination {
-  data: IUserGroup[];
-  pagination: IPagination;
-}

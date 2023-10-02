@@ -4,12 +4,13 @@ import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import {ServiceInterface} from '../interfaces/service.interface';
 import {PermissionUserEntity} from '@/entities/permission.user.entity';
-import {IPermissionUser, IPermissionUserPagination} from '@/interfaces/permission.user.interface';
+import {IPermissionUser} from '@/interfaces/permission.user.interface';
 import DB from '@/databases/database';
 import {Sequelize} from 'sequelize';
 import {PermissionUserFilter} from "@/filters/permission.user.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class PermissionUserService implements ServiceInterface {
   public permissionUserModel = DB.permissionUser;
@@ -24,7 +25,7 @@ export default class PermissionUserService implements ServiceInterface {
     return this;
   }
 
-  public async index(permissionUserFilter: PermissionUserFilter): Promise<IPermissionUserPagination> {
+  public async index(permissionUserFilter: PermissionUserFilter): Promise<IPaginateResponse<IPermissionUser>> {
 
     const whereCluase = (this.nestId != 0) ? {permissionId: this.nestId} : permissionUserFilter.whereStatement;
 
@@ -58,8 +59,7 @@ export default class PermissionUserService implements ServiceInterface {
 
     });
     const paginate: IPagination = paginationFields(permissionUserFilter.limit, permissionUserFilter.page, count);
-    return {data: rows, pagination: paginate};
-
+    return { data: rows, pagination: paginate };
   }
 
   public async show(id: number): Promise<IPermissionUser> {

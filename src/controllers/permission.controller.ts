@@ -3,9 +3,10 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
 import PermissionService from '../services/permission.service';
-import { IPermission, IPermissionPagination } from '../interfaces/permission.interface';
+import { IPermission } from '../interfaces/permission.interface';
 import { PermissionEntity } from '@/entities/permission.entity';
 import {PermissionFilter} from "@/filters/permission.filter";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class PermissionController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
@@ -13,7 +14,7 @@ export default class PermissionController extends ApiController {
       const permissionService = new PermissionService();
       const permissionFilter = new PermissionFilter();
       permissionFilter.transform(req).navigation(req);
-      const result: IPermissionPagination = await permissionService.index(permissionFilter);
+      const result: IPaginateResponse<IPermission> = await permissionService.index(permissionFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

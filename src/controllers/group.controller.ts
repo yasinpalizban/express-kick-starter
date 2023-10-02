@@ -3,10 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
 
-import { IGroup, IGroupPagination } from '../interfaces/group.interface';
+import { IGroup } from '../interfaces/group.interface';
 import GroupService from '../services/group.service';
 import { GroupEntity } from '@/entities/group.entity';
 import {GroupFilter} from "@/filters/group.filter";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class GroupController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
@@ -15,7 +16,7 @@ export default class GroupController extends ApiController {
       const groupFilter = new GroupFilter();
       groupFilter.transform(req).navigation(req);
 
-      const result: IGroupPagination = await groupService.index(groupFilter);
+      const result: IPaginateResponse<IGroup> = await groupService.index(groupFilter);
 
       res.status(StatusCodes.OK).json({
         statusMessage: i18n.t('api.commons.receive'),

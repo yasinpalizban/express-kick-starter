@@ -1,4 +1,3 @@
-import { IPagination } from './pagination';
 
 export interface IPermissionUser {
   id: number;
@@ -11,7 +10,3 @@ export interface IPermissionUser {
   permissionId: number;
 }
 
-export interface IPermissionUserPagination {
-  data: IPermissionUser[];
-  pagination?: IPagination;
-}

@@ -1,4 +1,3 @@
-import { IPagination } from './pagination';
 
 export interface IPermission {
   id: number;
@@ -7,7 +6,3 @@ export interface IPermission {
   active: boolean;
 }
 
-export interface IPermissionPagination {
-  data: IPermission[];
-  pagination: IPagination;
-}

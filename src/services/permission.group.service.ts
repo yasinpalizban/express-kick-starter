@@ -4,13 +4,14 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import DB from '@/databases/database';
 import { ServiceInterface } from '../interfaces/service.interface';
-import { IPermissionGroup, IPermissionGroupPagination } from '../interfaces/permission.group.interface';
+import { IPermissionGroup } from '../interfaces/permission.group.interface';
 
 import { PermissionGroupEntity } from '@/entities/permission.group.entity';
 import Sequelize, { Op } from 'sequelize';
 import {PermissionGroupFilter} from "@/filters/permission.group.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
+import {IPaginateResponse} from "@/interfaces/response.object";
 
 export default class PermissionGroupService implements ServiceInterface {
   public permissionGroupModel = DB.permissionGroup;
@@ -25,7 +26,7 @@ export default class PermissionGroupService implements ServiceInterface {
     return this;
   }
 
-  public async index(permissionGroupFilter: PermissionGroupFilter): Promise<IPermissionGroupPagination> {
+  public async index(permissionGroupFilter: PermissionGroupFilter): Promise<IPaginateResponse<IPermissionGroup>> {
 
     const whereCluase = (this.nestId != 0) ? {permissionId: this.nestId} : permissionGroupFilter.whereStatement;
 
