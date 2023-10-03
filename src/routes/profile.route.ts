@@ -3,7 +3,7 @@ import { Routes } from '../interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 import authMiddleware from '../middlewares/auth.middleware';
 import ProfileController from '../controllers/profile.controller';
-import { ProfileValidation } from '../validations/profile.validation';
+import { ProfileDto } from '../dtos/profile.dto';
 import multer from 'multer';
 import { sharedConfig } from '../configs/shared.config';
 import { multerFileFilter, multerRandomFileName } from '../utils/multerRandomFileName';
@@ -26,6 +26,6 @@ export default class ProfileRoute implements Routes {
 
     const upload = multer({ storage: storage, fileFilter: multerFileFilter, limits: { fileSize: this.maxSize } });
     this.router.get(`${this.path}`, authMiddleware, this.controller.index);
-    this.router.post(`${this.path}`, authMiddleware, upload.single('image'), validationMiddleware(ProfileValidation, 'body'), this.controller.create);
+    this.router.post(`${this.path}`, authMiddleware, upload.single('image'), validationMiddleware(ProfileDto, 'body'), this.controller.create);
   }
 }

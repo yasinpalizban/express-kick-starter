@@ -2,16 +2,16 @@ import { Router } from 'express';
 import AuthController from '../controllers/auth.controller';
 import { Routes } from '../interfaces/routes.interface';
 import authMiddleware from '../middlewares/auth.middleware';
-import validationMiddleware from '../middlewares/validation.middleware';
-import { AuthSignupValidation } from '../validations/auth.signup.validation';
-import { AuthSigninValidation } from '../validations/auth.signin.validation';
-import { AuthForgotValidation } from '../validations/auth.forgot.validation';
-import { AuthActivateTokenEmailValidation } from '../validations/auth.activate.token.email.validation';
-import { AuthSendActivateEmailValidation } from '../validations/auth.send.activate.email.validation';
-import { AuthSendActivatePhoneValidation } from '../validations/auth.send.activate.phone.validation';
-import { AuthResetPasswordEmailValidation } from '../validations/auth.reset.password.email.validation';
-import { AuthResetPasswordPhoneValidation } from '../validations/auth.reset.password.phone.validation';
-import { AuthActivateTokenPhoneValidation } from '../validations/auth.activate.token.phone.validation';
+import ValidationMiddleware from '../middlewares/validation.middleware';
+import { AuthSignupDto } from '../dtos/auth.signup.dto';
+import { AuthSigninDto } from '../dtos/auth.signin.dto';
+import { AuthForgotDto } from '../dtos/auth.forgot.dto';
+import { AuthActivateTokenEmailDto } from '../dtos/auth.activate.token.email.dto';
+import { AuthSendActivateEmailDto } from '../dtos/auth.send.activate.email.dto';
+import { AuthSendActivatePhoneDto } from '../dtos/auth.send.activate.phone.dto';
+import { AuthResetPasswordEmailDto } from '../dtos/auth.reset.password.email.dto';
+import { AuthResetPasswordPhoneDto } from '../dtos/auth.reset.password.phone.dto';
+import { AuthActivateTokenPhoneDto } from '../dtos/auth.activate.token.phone.dto';
 import isSignInMiddleware from '../middlewares/is.sign.in.middleware';
 import rateLimit from 'express-rate-limit';
 import { default as i18n } from 'i18next';
@@ -32,46 +32,46 @@ export default class AuthRoute implements Routes {
     //   message: i18n.t('middleWear.throttle'),
     // });
 
-    this.router.post(`${this.pathNested}/signin`, isSignInMiddleware, validationMiddleware(AuthSigninValidation, 'body'), this.controller.signIn);
+    this.router.post(`${this.pathNested}/signin`, isSignInMiddleware, ValidationMiddleware(AuthSigninDto, 'body'), this.controller.signIn);
     this.router.get(`${this.pathNested}/is-signin`, authMiddleware, this.controller.isSignIn);
     this.router.post(`${this.pathNested}/signout`, authMiddleware, this.controller.signOut);
-    this.router.post(`${this.pathNested}/signup`, isSignInMiddleware, validationMiddleware(AuthSignupValidation, 'body'), this.controller.signUp);
+    this.router.post(`${this.pathNested}/signup`, isSignInMiddleware, ValidationMiddleware(AuthSignupDto, 'body'), this.controller.signUp);
     this.router.post(
       `${this.pathNested}/activate-account-email`,
       isSignInMiddleware,
-      validationMiddleware(AuthActivateTokenEmailValidation, 'body'),
+      ValidationMiddleware(AuthActivateTokenEmailDto, 'body'),
       this.controller.activationViaEmail,
     );
     this.router.post(
       `${this.pathNested}/send-activate-email`,
       isSignInMiddleware,
-      validationMiddleware(AuthSendActivateEmailValidation, 'body'),
+      ValidationMiddleware(AuthSendActivateEmailDto, 'body'),
       this.controller.sendActivateCodeViaEmail,
     );
     this.router.post(
       `${this.pathNested}/activate-account-sms`,
       isSignInMiddleware,
-      validationMiddleware(AuthActivateTokenPhoneValidation, 'body'),
+      ValidationMiddleware(AuthActivateTokenPhoneDto, 'body'),
       this.controller.activationViaSms,
     );
     this.router.post(
       `${this.pathNested}/send-activate-sms`,
       isSignInMiddleware,
-      validationMiddleware(AuthSendActivatePhoneValidation, 'body'),
+      ValidationMiddleware(AuthSendActivatePhoneDto, 'body'),
       this.controller.sendActivateCodeViaSms,
     );
 
-    this.router.post(`${this.pathNested}/forgot`, isSignInMiddleware, validationMiddleware(AuthForgotValidation, 'body'), this.controller.forgot);
+    this.router.post(`${this.pathNested}/forgot`, isSignInMiddleware, ValidationMiddleware(AuthForgotDto, 'body'), this.controller.forgot);
     this.router.post(
       `${this.pathNested}/reset-password-email`,
       isSignInMiddleware,
-      validationMiddleware(AuthResetPasswordEmailValidation, 'body'),
+      ValidationMiddleware(AuthResetPasswordEmailDto, 'body'),
       this.controller.resetPasswordViaEmail,
     );
     this.router.post(
       `${this.pathNested}/reset-password-sms`,
       isSignInMiddleware,
-      validationMiddleware(AuthResetPasswordPhoneValidation, 'body'),
+      ValidationMiddleware(AuthResetPasswordPhoneDto, 'body'),
       this.controller.resetPasswordViaSms,
     );
   }

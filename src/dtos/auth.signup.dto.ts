@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 import { IsEqualTo } from '@/utils/is.equal.to';
 
-export class AuthSignupValidation {
+export class AuthSignupDto {
   @IsString()
   @MinLength(3)
   @MaxLength(255)
