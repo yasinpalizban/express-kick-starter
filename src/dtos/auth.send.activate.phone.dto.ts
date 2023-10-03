@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-export class AuthSendActivatePhoneValidation {
+export class AuthSendActivatePhoneDto {
   @IsString()
   @MaxLength(11)
   @IsNotEmpty()

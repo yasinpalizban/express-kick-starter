@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-export class AuthSendActivateEmailValidation {
+export class AuthSendActivateEmailDto {
   @IsString()
   @IsEmail()
   @MinLength(3)

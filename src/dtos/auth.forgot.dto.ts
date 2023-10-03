@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-export class AuthForgotValidation {
+export class AuthForgotDto {
   @IsString()
   @MinLength(3)
   @MaxLength(255)

@@ -11,7 +11,7 @@ import Sequelize, { Op } from 'sequelize';
 import {PermissionGroupFilter} from "@/filters/permission.group.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
-import {IPaginateResponse} from "@/interfaces/response.object";
+import {IPaginateResponse} from "@/interfaces/paginate.response";
 
 export default class PermissionGroupService implements ServiceInterface {
   public permissionGroupModel = DB.permissionGroup;

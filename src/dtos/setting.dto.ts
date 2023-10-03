@@ -1,6 +1,6 @@
 import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class SettingValidation {
+export class SettingDto {
   @IsOptional()
   public id:number;
   @IsString()

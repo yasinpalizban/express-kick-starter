@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class PermissionGroupValidation {
+export class PermissionUserDto {
   @IsOptional()
-  public id: number;
+  public id:number;
 
   @IsNotEmpty()
-  public groupId: number;
+  public userId: number;
 
   @IsNotEmpty()
   public permissionId: number;
@@ -13,4 +13,6 @@ export class PermissionGroupValidation {
   @MinLength(3)
   @MaxLength(255)
   public actions: string;
+
+
 }

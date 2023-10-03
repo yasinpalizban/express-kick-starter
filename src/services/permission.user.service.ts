@@ -10,7 +10,7 @@ import {Sequelize} from 'sequelize';
 import {PermissionUserFilter} from "@/filters/permission.user.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
-import {IPaginateResponse} from "@/interfaces/response.object";
+import {IPaginateResponse} from "@/interfaces/paginate.response";
 
 export default class PermissionUserService implements ServiceInterface {
   public permissionUserModel = DB.permissionUser;

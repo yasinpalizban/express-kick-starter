@@ -6,7 +6,7 @@ import PermissionService from '../services/permission.service';
 import { IPermission } from '../interfaces/permission.interface';
 import { PermissionEntity } from '@/entities/permission.entity';
 import {PermissionFilter} from "@/filters/permission.filter";
-import {IPaginateResponse} from "@/interfaces/response.object";
+import {IPaginateResponse} from "@/interfaces/paginate.response";
 
 export default class PermissionController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {

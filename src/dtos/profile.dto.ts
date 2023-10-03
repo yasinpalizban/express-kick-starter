@@ -1,7 +1,7 @@
 import { IsEmail, IsString, IsOptional, MinLength, MaxLength } from 'class-validator';
 import { IsEqualTo } from '@/utils/is.equal.to';
 
-export class ProfileValidation {
+export class ProfileDto {
   @IsOptional()
   public id:number;
   @IsString()

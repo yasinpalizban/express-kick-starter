@@ -1,6 +1,6 @@
-import { IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsBoolean, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class GroupValidation {
+export class PermissionDto {
   @IsOptional()
   public id:number;
   @IsString()
@@ -11,4 +11,8 @@ export class GroupValidation {
   @MinLength(3)
   @MaxLength(255)
   public description: string;
+  @IsBoolean()
+  public active: boolean;
+
+
 }

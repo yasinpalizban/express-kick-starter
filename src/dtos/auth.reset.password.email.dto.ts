@@ -1,11 +1,13 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 import { IsEqualTo } from '@/utils/is.equal.to';
 
-export class AuthResetPasswordPhoneValidation {
+export class AuthResetPasswordEmailDto {
   @IsString()
-  @MaxLength(11)
+  @IsEmail()
+  @MinLength(3)
+  @MaxLength(255)
   @IsNotEmpty()
-  public phone: string;
+  public email: string;
   @IsString()
   public resetToken: string;
   @IsString()

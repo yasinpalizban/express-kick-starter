@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsBoolean, MinLength, MaxLength, IsNotEmpty } from "class-validator";
 
-export class UsersPutValidation {
+export class UsersPutDto {
   @IsOptional()
   public id:number;
   @IsString()

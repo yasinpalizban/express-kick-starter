@@ -9,7 +9,7 @@ import {GroupEntity} from '@/entities/group.entity';
 import {GroupFilter} from "@/filters/group.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
-import {IPaginateResponse} from "@/interfaces/response.object";
+import {IPaginateResponse} from "@/interfaces/paginate.response";
 
 export default class GroupService implements ServiceInterface {
   public groupModel = DB.group;

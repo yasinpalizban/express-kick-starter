@@ -9,7 +9,7 @@ import { PermissionEntity } from '@/entities/permission.entity';
 import {PermissionFilter} from "@/filters/permission.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
-import {IPaginateResponse} from "@/interfaces/response.object";
+import {IPaginateResponse} from "@/interfaces/paginate.response";
 
 export default class PermissionService implements ServiceInterface {
   public permissionModel = DB.permission;

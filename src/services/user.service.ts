@@ -11,7 +11,7 @@ import Sequelize from 'sequelize';
 import {UserFilter} from "@/filters/user.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
-import {IPaginateResponse} from "@/interfaces/response.object";
+import {IPaginateResponse} from "@/interfaces/paginate.response";
 
 export default class UserService implements ServiceInterface {
   public userModel = DB.users;

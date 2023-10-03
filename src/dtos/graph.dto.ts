@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class GraphValidation {
+export class GraphDto {
   @IsString()
   @IsNotEmpty()
   public type: Date;

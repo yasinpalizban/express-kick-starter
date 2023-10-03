@@ -7,7 +7,7 @@ import { IGroup } from '../interfaces/group.interface';
 import GroupService from '../services/group.service';
 import { GroupEntity } from '@/entities/group.entity';
 import {GroupFilter} from "@/filters/group.filter";
-import {IPaginateResponse} from "@/interfaces/response.object";
+import {IPaginateResponse} from "@/interfaces/paginate.response";
 
 export default class GroupController extends ApiController {
   async index(req: Request, res: Response, next: NextFunction): Promise<void | Response> {

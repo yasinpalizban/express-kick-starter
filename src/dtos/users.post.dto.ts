@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class UsersPostValidation {
+export class UsersPostDto {
   @IsEmail()
   @MinLength(3)
   @MaxLength(255)

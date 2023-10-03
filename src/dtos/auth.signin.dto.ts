@@ -1,6 +1,6 @@
 import { IsString, IsOptional, MaxLength, MinLength, IsNotEmpty } from 'class-validator';
 
-export class AuthSigninValidation {
+export class AuthSigninDto {
   @IsString()
   @MinLength(3)
   @MaxLength(255)
