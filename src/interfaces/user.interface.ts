@@ -1,6 +1,7 @@
+import {IBasic} from "@/interfaces/basic.interface";
 
-export interface IUser {
-  id?: number;
+export interface IUser extends  IBasic{
+
   login?: string;
   group?: string;
   groupId?: number;

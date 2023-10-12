@@ -1,5 +1,5 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { IIpActivity } from '../interfaces/ip.activity.interface';
+import {DataTypes, Model, Op, Sequelize} from 'sequelize';
+import {IIpActivity} from '../interfaces/ip.activity.interface';
 
 export class IpActivityModel extends Model<IIpActivity> implements IIpActivity {
   id?: number;
@@ -10,6 +10,21 @@ export class IpActivityModel extends Model<IIpActivity> implements IIpActivity {
   userAgent: string;
   type: string;
   date: Date;
+
+  async keepLimitOfAttempts(trashHold: number): Promise<void> {
+
+    const countAll = await IpActivityModel.count({col: 'id'});
+    if (countAll > trashHold) {
+      const lastId = await IpActivityModel.findOne({limit: 1, order: [['id', 'desc']]});
+      const targetId = lastId.id - trashHold;
+      await IpActivityModel.destroy({
+        where: {
+          id: {[ Op.lte]: targetId},
+        },
+      });
+    }
+  }
+
 }
 
 export function ipActivityModel(sequelize: Sequelize): typeof IpActivityModel {

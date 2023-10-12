@@ -1,7 +1,6 @@
 import { Entity } from '../libraries/entity';
 
 export class PermissionEntity extends Entity {
-  id: number;
   name: string;
   description: string;
   active: boolean;

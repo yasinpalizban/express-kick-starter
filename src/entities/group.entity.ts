@@ -1,7 +1,6 @@
 import { Entity } from '../libraries/entity';
 
 export class GroupEntity extends Entity {
-  id: number;
   name: string;
   description: string;
 

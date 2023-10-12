@@ -10,7 +10,7 @@ import { isEmpty } from '../utils/is.empty';
 import { IMulterFile } from '../interfaces/multer.file.interface';
 import { optimizeImage } from '../utils/optimize.image';
 import { sharedConfig } from '../configs/shared.config';
-import { IUserLogIn } from '@/interfaces/Log.in.interface';
+import { IUserLogIn } from '@/interfaces/log.in.interface';
 
 export default class ProfileController extends ApiController {
   async index(req: RequestWithUser, res: Response, next: NextFunction): Promise<void | Response> {

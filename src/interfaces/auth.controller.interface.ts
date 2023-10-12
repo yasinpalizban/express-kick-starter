@@ -6,7 +6,8 @@ export declare interface AuthControllerInterface {
 
   signIn(req: Request, res: Response, next: NextFunction): Promise<void | Response>;
 
-  isSignIn(req: Request, res: Response, next: NextFunction): Promise<void | Response>;
+
+  refresh(req: Request, res: Response, next: NextFunction): Promise<void | Response>;
 
   signOut(req: RequestWithUser, res: Response, next: NextFunction): Promise<void | Response>;
 

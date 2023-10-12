@@ -1,7 +1,6 @@
 import { Entity } from '../libraries/entity';
 
 export class PermissionUserEntity extends Entity {
-  id: number;
   actions: string;
   userId: number;
   permissionId: number;

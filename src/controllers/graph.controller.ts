@@ -31,6 +31,7 @@ export default class GraphController extends ApiController {
         statusMessage: i18n.t('api.commons.receive'),
         data: data,
       });
+
     } catch (error) {
       next(error);
     }

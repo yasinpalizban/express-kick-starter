@@ -1,5 +1,6 @@
 export const authConfig = {
   defaultUserProfile: 'public/upload/profile/default-avatar.jpg',
+  logAttempt: 50,
   gmail: {
     clientId: '',
     clientSecret: '',

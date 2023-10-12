@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import { Entity } from '../libraries/entity';
 
 export class AuthEntity extends Entity {
-  id: number;
+
   login: string;
   username: string;
   password: string;

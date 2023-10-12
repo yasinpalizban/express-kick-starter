@@ -1,20 +1,18 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import AuthController from '../controllers/auth.controller';
-import { Routes } from '../interfaces/routes.interface';
+import {Routes} from '../interfaces/routes.interface';
 import authMiddleware from '../middlewares/auth.middleware';
 import ValidationMiddleware from '../middlewares/validation.middleware';
-import { AuthSignupDto } from '../dtos/auth.signup.dto';
-import { AuthSigninDto } from '../dtos/auth.signin.dto';
-import { AuthForgotDto } from '../dtos/auth.forgot.dto';
-import { AuthActivateTokenEmailDto } from '../dtos/auth.activate.token.email.dto';
-import { AuthSendActivateEmailDto } from '../dtos/auth.send.activate.email.dto';
-import { AuthSendActivatePhoneDto } from '../dtos/auth.send.activate.phone.dto';
-import { AuthResetPasswordEmailDto } from '../dtos/auth.reset.password.email.dto';
-import { AuthResetPasswordPhoneDto } from '../dtos/auth.reset.password.phone.dto';
-import { AuthActivateTokenPhoneDto } from '../dtos/auth.activate.token.phone.dto';
+import {AuthSignupDto} from '../dtos/auth.signup.dto';
+import {AuthSigninDto} from '../dtos/auth.signin.dto';
+import {AuthForgotDto} from '../dtos/auth.forgot.dto';
+import {AuthActivateTokenEmailDto} from '../dtos/auth.activate.token.email.dto';
+import {AuthSendActivateEmailDto} from '../dtos/auth.send.activate.email.dto';
+import {AuthSendActivatePhoneDto} from '../dtos/auth.send.activate.phone.dto';
+import {AuthResetPasswordEmailDto} from '../dtos/auth.reset.password.email.dto';
+import {AuthResetPasswordPhoneDto} from '../dtos/auth.reset.password.phone.dto';
+import {AuthActivateTokenPhoneDto} from '../dtos/auth.activate.token.phone.dto';
 import isSignInMiddleware from '../middlewares/is.sign.in.middleware';
-import rateLimit from 'express-rate-limit';
-import { default as i18n } from 'i18next';
 
 export default class AuthRoute implements Routes {
   public pathNested = '/api/auth';
@@ -33,8 +31,7 @@ export default class AuthRoute implements Routes {
     // });
 
     this.router.post(`${this.pathNested}/signin`, isSignInMiddleware, ValidationMiddleware(AuthSigninDto, 'body'), this.controller.signIn);
-    this.router.get(`${this.pathNested}/is-signin`, authMiddleware, this.controller.isSignIn);
-    this.router.post(`${this.pathNested}/signout`, authMiddleware, this.controller.signOut);
+    this.router.post(`${this.pathNested}/refresh`, authMiddleware, this.controller.refresh);
     this.router.post(`${this.pathNested}/signup`, isSignInMiddleware, ValidationMiddleware(AuthSignupDto, 'body'), this.controller.signUp);
     this.router.post(
       `${this.pathNested}/activate-account-email`,

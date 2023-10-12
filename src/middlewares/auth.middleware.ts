@@ -16,7 +16,7 @@ import { isEmpty } from '../utils/is.empty';
 import DB from '@/databases/database';
 
 import { ErrorType } from '../enums/error.type.enum';
-import { IUserLogIn } from '../interfaces/Log.in.interface';
+import { IUserLogIn } from '../interfaces/log.in.interface';
 import { routeController } from '@/utils/route.controller';
 import { IUser } from '@/interfaces/user.interface';
 import { IGroup } from '@/interfaces/group.interface';

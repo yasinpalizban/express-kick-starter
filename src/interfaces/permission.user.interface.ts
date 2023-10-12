@@ -1,6 +1,6 @@
+import {IBasic} from "@/interfaces/basic.interface";
 
-export interface IPermissionUser {
-  id: number;
+export interface IPermissionUser extends  IBasic {
   actions: string;
   userId: number;
   userName?: string;

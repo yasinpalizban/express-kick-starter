@@ -6,7 +6,7 @@ import {IUser} from '../interfaces/user.interface';
 import AuthService from '../services/auth.service';
 
 import {AuthControllerInterface} from '../interfaces/auth.controller.interface';
-import {ILogIn} from '../interfaces/Log.in.interface';
+import {ILogIn} from '../interfaces/log.in.interface';
 import requestIp from 'request-ip';
 import {authConfig} from '../configs/auth.config';
 import fetch from 'isomorphic-fetch';
@@ -16,6 +16,7 @@ import {sharedConfig} from '@/configs/shared.config';
 import {IPusherNotification} from '@/interfaces/pusher.message';
 import {NotificationType} from '@/enums/notification.type.enum';
 import {getDateNow} from '@/utils/get.date.now';
+import {IRefreshToken} from "@/interfaces/jwt.token.interface";
 
 export default class AuthController implements AuthControllerInterface {
   public signUp = async function (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
@@ -123,11 +124,18 @@ export default class AuthController implements AuthControllerInterface {
       next(error);
     }
   };
-  public isSignIn = async function (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
+
+
+  public refresh = async function (req: RequestWithUser, res: Response, next: NextFunction): Promise<void | Response> {
     try {
+      const authService = new AuthService();
+      const authEntity = new AuthEntity(req.user);
+      const refreshToken: IRefreshToken = await authService.refresh(authEntity);
+
+      res.setHeader('Set-Cookie', [refreshToken.cookie]);
       res.status(StatusCodes.OK).json({
-        statusMessage: 'check is sign in',
-        success: true,
+        statusMessage: i18n.t('auth.singIn'),
+        data: refreshToken.jwt,
       });
     } catch (error) {
       next(error);

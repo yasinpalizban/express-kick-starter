@@ -1,7 +1,6 @@
 import { Entity } from '../libraries/entity';
 
 export class SettingEntity extends Entity {
-  id?: number;
   key: string;
   value: string;
   description: string;

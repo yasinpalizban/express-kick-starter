@@ -7,3 +7,8 @@ export interface TokenData {
   expire: number;
   maxAge: number;
 }
+
+export interface IRefreshToken {
+  cookie: string;
+  jwt: TokenData
+}
