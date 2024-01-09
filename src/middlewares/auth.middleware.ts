@@ -1,25 +1,20 @@
-import { SECRET_KEY } from '../configs/config';
-import { NextFunction, Response } from 'express';
+import {SECRET_KEY} from '../configs/config';
+import {NextFunction, Response} from 'express';
 import jwt from 'jsonwebtoken';
-import { default as i18n } from 'i18next';
-import { StatusCodes } from 'http-status-codes';
-import { DataStoredInToken } from '../interfaces/jwt.token.interface';
-import { RequestWithUser } from '../interfaces/reqeust.with.user.interface';
-
-import { RoleRouteService } from '../services/role.route.service';
-
-import { IPermission } from '../interfaces/permission.interface';
-
-import { IPermissionUser } from '../interfaces/permission.user.interface';
-import { IPermissionGroup } from '../interfaces/permission.group.interface';
-import { isEmpty } from '../utils/is.empty';
+import {default as i18n} from 'i18next';
+import {StatusCodes} from 'http-status-codes';
+import {DataStoredInToken} from '../interfaces/jwt.token.interface';
+import {RequestWithUser} from '../interfaces/reqeust.with.user.interface';
+import {IPermission} from '../interfaces/permission';
+import {IPermissionUser} from '../interfaces/permission.user';
+import {IPermissionGroup} from '../interfaces/permission.group';
+import {isEmpty} from '../utils/is.empty';
 import DB from '@/databases/database';
-
-import { ErrorType } from '../enums/error.type.enum';
-import { IUserLogIn } from '../interfaces/log.in.interface';
-import { routeController } from '@/utils/route.controller';
-import { IUser } from '@/interfaces/user.interface';
-import { IGroup } from '@/interfaces/group.interface';
+import {ErrorType} from '../enums/error.type.enum';
+import {IUserLogIn} from '../interfaces/log.in.interface';
+import {routeController} from '@/utils/route.controller';
+import {IUser} from '@/interfaces/user';
+import {IGroup} from '@/interfaces/group';
 
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
@@ -31,7 +26,6 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
       });
     }
 
-    const ruleRoute = new RoleRouteService();
     const verificationResponse = (await jwt.verify(Authorization, SECRET_KEY)) as DataStoredInToken;
     const userId = verificationResponse.id;
 
@@ -51,33 +45,36 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
     userLoggedIn.role = group;
     req.user = userLoggedIn;
     const controllerName = routeController(req.route.path);
-    const permissions: IPermission = await DB.permission.findOne({ where: { active: true, name: controllerName } });
-    if (isEmpty(permissions)) {
-      const controllerRole: [] | null = ruleRoute.getRoleAccess(controllerName);
-      if (controllerRole == null) {
-        return next();
+    const permission: IPermission = await DB.permission.findOne({where: {name: controllerName}});
+    const groupPermission: IPermissionGroup = await DB.permissionGroup.findOne({
+      where: {
+        permissionId: permission.id,
+        groupId: group.id
       }
-      for (const role of controllerRole) {
-        if (role == group.name) {
-          return next();
-        }
+    });
+
+    if (permission.active == false) {
+      if (!isEmpty(groupPermission)) {
+        return next();
       }
     } else {
       const typeMethod = req.method;
-      const userPermission: IPermissionUser[] = await DB.permissionUser.findAll({ where: { permissionId: permissions.id, userId: findUser.id } });
-      const groupPermission: IPermissionGroup[] = await DB.permissionGroup.findAll({ where: { permissionId: permissions.id, groupId: group.id } });
-
-      for (const isUser of userPermission) {
-        if (isUser.userId == userLoggedIn.id && isUser.actions.search(typeMethod.toLowerCase()) !== -1) {
-          return next();
+      const userPermission: IPermissionUser = await DB.permissionUser.findOne({
+        where: {
+          permissionId: permission.id,
+          userId: findUser.id
         }
+      });
+
+
+      if (!isEmpty(userPermission) && userPermission.userId == findUser.id && userPermission.actions.search(typeMethod.toLowerCase()) !== -1) {
+        return next();
       }
 
-      for (const isGroup of groupPermission) {
-        if (isGroup.groupId == userLoggedIn.role.id && isGroup.actions.search(typeMethod.toLowerCase()) !== -1) {
-          return next();
-        }
+      if (!isEmpty(groupPermission) && groupPermission.groupId == group.id && groupPermission.actions.search(typeMethod.toLowerCase()) !== -1) {
+        return next();
       }
+
     }
     res.status(StatusCodes.UNAUTHORIZED).json({
       error: i18n.t('middleWear.notEnoughPrivilege'),

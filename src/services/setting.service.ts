@@ -2,7 +2,7 @@ import {HttpException} from '../exceptions/HttpException';
 import {isEmpty} from '../utils/is.empty';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
-import {ISetting} from '../interfaces/setting.interface';
+import {ISetting} from '../interfaces/setting';
 import {ServiceInterface} from '../interfaces/service.interface';
 import DB from '@/databases/database';
 import {SettingEntity} from '../entities/setting.entity';
@@ -11,17 +11,15 @@ import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 import {IPaginateResponse} from "@/interfaces/paginate.response";
 
-export default class SettingService implements ServiceInterface {
+export default class SettingService implements ServiceInterface<ISetting> {
   public settingModel = DB.setting;
 
   public async index(settingFilter: SettingFilter): Promise<IPaginateResponse<ISetting>> {
-    const select = isEmpty(settingFilter.filed) ? null : settingFilter.filed;
 
     const { count, rows } = await this.settingModel.findAndCountAll({
       limit: settingFilter.limit,
       offset: settingFilter.page,
       order: [[settingFilter.sort, settingFilter.order]],
-      attributes: select,
       where: settingFilter.whereStatement,
 
     });

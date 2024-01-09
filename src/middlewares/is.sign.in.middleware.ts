@@ -5,7 +5,7 @@ import { default as i18n } from 'i18next';
 import { StatusCodes } from 'http-status-codes';
 import { DataStoredInToken } from '../interfaces/jwt.token.interface';
 import { RequestWithUser } from '../interfaces/reqeust.with.user.interface';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user';
 import DB from '@/databases/database';
 
 const isSignInMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {

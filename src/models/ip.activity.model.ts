@@ -1,5 +1,5 @@
 import {DataTypes, Model, Op, Sequelize} from 'sequelize';
-import {IIpActivity} from '../interfaces/ip.activity.interface';
+import {IIpActivity} from '../interfaces/ip.activity';
 
 export class IpActivityModel extends Model<IIpActivity> implements IIpActivity {
   id?: number;

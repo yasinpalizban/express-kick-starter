@@ -1,9 +1,9 @@
 
-export declare interface ServiceInterface {
+export declare interface ServiceInterface<T> {
 
-  index?(urlQueryParam?:  any): Promise<any[] | any>;
+  index?(urlQueryParam?:  any): Promise<T[] | any>;
 
-  show?(id: number): Promise<any>;
+  show?(id: number): Promise<T>;
 
   create?(data: any): Promise<void | any>;
 

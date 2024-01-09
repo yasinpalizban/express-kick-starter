@@ -1,9 +1,9 @@
-import { IUser } from './user.interface';
+import { IUser } from './user';
 import { TokenData } from './jwt.token.interface';
-import { IPermission } from './permission.interface';
-import { IPermissionGroup } from './permission.group.interface';
-import { IPermissionUser } from './permission.user.interface';
-import { IGroup } from './group.interface';
+import { IPermission } from './permission';
+import { IPermissionGroup } from './permission.group';
+import { IPermissionUser } from './permission.user';
+import { IGroup } from './group';
 
 export interface ILogIn {
   cookie: string;

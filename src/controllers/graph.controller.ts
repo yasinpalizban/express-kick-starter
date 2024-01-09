@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
 import GraphService from '@/services/graph.service';
-import { IGraph } from '@/interfaces/graph.interface';
+import { IGraph } from '@/interfaces/graph';
 import { GraphEntity } from '@/entities/graph.entity';
 
 export default class GraphController extends ApiController {

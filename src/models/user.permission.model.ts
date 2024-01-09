@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { IPermissionUser } from '../interfaces/permission.user.interface';
+import { IPermissionUser } from '../interfaces/permission.user';
 
 
 export class UserPermissionsModel extends Model<IPermissionUser> implements IPermissionUser {

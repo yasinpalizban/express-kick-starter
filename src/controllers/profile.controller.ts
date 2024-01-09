@@ -5,7 +5,7 @@ import ApiController from './api.controller';
 import { RequestWithUser } from '../interfaces/reqeust.with.user.interface';
 import ProfileService from '../services/profile.service';
 import { UserEntity } from '../entities/user.entity';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user';
 import { isEmpty } from '../utils/is.empty';
 import { IMulterFile } from '../interfaces/multer.file.interface';
 import { optimizeImage } from '../utils/optimize.image';

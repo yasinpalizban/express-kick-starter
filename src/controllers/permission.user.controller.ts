@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import ApiController from '../controllers/api.controller';
-import {IPermissionUser} from '../interfaces/permission.user.interface';
+import {IPermissionUser} from '../interfaces/permission.user';
 import PermissionUserService from '../services/permission.user.service';
 import {PermissionUserEntity} from '@/entities/permission.user.entity';
 import {PermissionUserFilter} from "@/filters/permission.user.filter";

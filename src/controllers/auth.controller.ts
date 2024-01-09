@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import {RequestWithUser} from '../interfaces/reqeust.with.user.interface';
-import {IUser} from '../interfaces/user.interface';
+import {IUser} from '../interfaces/user';
 import AuthService from '../services/auth.service';
 
 import {AuthControllerInterface} from '../interfaces/auth.controller.interface';

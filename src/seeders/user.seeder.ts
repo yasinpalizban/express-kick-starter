@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { Seeder } from '../libraries/seeder';
 import { RoleType } from '../enums/role.type.enum';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user';
 import DB from '../databases/database';
 import { UserEntity } from '../entities/user.entity';
-import { IGroup } from '../interfaces/group.interface';
+import { IGroup } from '../interfaces/group';
 /*
  *  in order to seeder work perfectly out he box
  * you need import exact path  avoid using aliases path  for import file

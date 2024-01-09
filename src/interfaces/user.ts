@@ -1,4 +1,4 @@
-import {IBasic} from "@/interfaces/basic.interface";
+import {IBasic} from "@/interfaces/Basic";
 
 export interface IUser extends  IBasic{
 

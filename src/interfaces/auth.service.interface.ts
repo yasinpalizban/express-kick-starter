@@ -1,5 +1,5 @@
 import { TokenData } from './jwt.token.interface';
-import { IUser } from './user.interface';
+import { IUser } from './user';
 import { AuthEntity } from '@/entities/auth.entity';
 
 export declare interface AuthServiceInterface {

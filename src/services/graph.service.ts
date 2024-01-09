@@ -4,14 +4,14 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import { ServiceInterface } from '../interfaces/service.interface';
 import DB from '@/databases/database';
-import { IGraph } from '@/interfaces/graph.interface';
+import { IGraph } from '@/interfaces/graph';
 import { GraphEntity } from '@/entities/graph.entity';
 import { Op } from 'sequelize';
 import { getDateNow } from '@/utils/get.date.now';
 
 import { getCountryList } from '@/utils/getCountry';
 
-export default class GraphService implements ServiceInterface {
+export default class GraphService implements ServiceInterface<IGraph> {
 
 
   public async index(): Promise<IGraph[]> {

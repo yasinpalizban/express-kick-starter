@@ -2,10 +2,10 @@ import { faker } from '@faker-js/faker';
 import { Seeder } from '../libraries/seeder';
 
 import { RoleType } from '../enums/role.type.enum';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user';
 import DB from '../databases/database';
 import { AuthEntity } from '../entities/auth.entity';
-import { IGroup } from '../interfaces/group.interface';
+import { IGroup } from '../interfaces/group';
 
 /*
  *  in order to seeder work perfectly out he box

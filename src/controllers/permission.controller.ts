@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
 import PermissionService from '../services/permission.service';
-import { IPermission } from '../interfaces/permission.interface';
+import { IPermission } from '../interfaces/permission';
 import { PermissionEntity } from '@/entities/permission.entity';
 import {PermissionFilter} from "@/filters/permission.filter";
 import {IPaginateResponse} from "@/interfaces/paginate.response";

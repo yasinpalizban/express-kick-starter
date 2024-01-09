@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { ISetting } from '@/interfaces/setting.interface';
+import { ISetting } from '@/interfaces/setting';
 
 export class SettingModel extends Model<ISetting> implements ISetting {
   public id?: number;

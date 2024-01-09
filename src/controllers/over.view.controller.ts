@@ -6,7 +6,7 @@ import ApiController from '../controllers/api.controller';
 import UserService from '../services/user.service';
 import {UserFilter} from "@/filters/user.filter";
 import {IPaginateResponse} from "@/interfaces/paginate.response";
-import {IUser} from "@/interfaces/user.interface";
+import {IUser} from "@/interfaces/user";
 
 
 export default class OverViewController extends ApiController {

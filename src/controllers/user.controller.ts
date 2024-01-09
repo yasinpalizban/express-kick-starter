@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from './api.controller';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user';
 import UserService from '../services/user.service';
 import { UserEntity } from '../entities/user.entity';
 import {UserFilter} from "@/filters/user.filter";

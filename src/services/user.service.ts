@@ -3,23 +3,23 @@ import {isEmpty} from '../utils/is.empty';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import {UserEntity} from '../entities/user.entity';
-import {IUser} from '../interfaces/user.interface';
+import {IUser} from '../interfaces/user';
 import {ServiceInterface} from '../interfaces/service.interface';
 import DB from '@/databases/database';
-import {IUserGroup} from '@/interfaces/group.user.interface';
+import {IUserGroup} from '@/interfaces/group.user';
 import Sequelize from 'sequelize';
 import {UserFilter} from "@/filters/user.filter";
 import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 import {IPaginateResponse} from "@/interfaces/paginate.response";
 
-export default class UserService implements ServiceInterface {
+export default class UserService implements ServiceInterface<IUser> {
   public userModel = DB.users;
   public userGroupModel = DB.userGroup;
 
   public async index(userFilter: UserFilter): Promise<IPaginateResponse<IUser>> {
 
-    const select = isEmpty(userFilter.filed) ? [
+    const select =  [
       [Sequelize.literal('`UserModel`.`id`'), 'id'],
       [Sequelize.literal('`UserModel`.`username`'), 'username'],
       [Sequelize.literal('`UserModel`.`email`'), 'email'],
@@ -39,7 +39,7 @@ export default class UserService implements ServiceInterface {
       [Sequelize.literal('`UserModel`.`updated_at`'), 'updatedAt'],
       [Sequelize.literal('`UserModel`.`deleted_at`'), 'deletedAt'],
       [Sequelize.literal('`GroupModel`.`name`'), 'group'],
-    ] : userFilter.filed;
+    ];
     let roleUser;
     if (userFilter.foreignKey) {
       roleUser = {id: userFilter.foreignKey};

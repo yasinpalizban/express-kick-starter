@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from '../controllers/api.controller';
 
-import { IGroup } from '../interfaces/group.interface';
+import { IGroup } from '../interfaces/group';
 import GroupService from '../services/group.service';
 import { GroupEntity } from '@/entities/group.entity';
 import {GroupFilter} from "@/filters/group.filter";

@@ -2,7 +2,7 @@ import { HttpException } from '../exceptions/HttpException';
 import { isEmpty } from '../utils/is.empty';
 import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
-import { IPermission } from '../interfaces/permission.interface';
+import { IPermission } from '../interfaces/permission';
 import { ServiceInterface } from '../interfaces/service.interface';
 import DB from '@/databases/database';
 import { PermissionEntity } from '@/entities/permission.entity';
@@ -11,17 +11,15 @@ import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 import {IPaginateResponse} from "@/interfaces/paginate.response";
 
-export default class PermissionService implements ServiceInterface {
+export default class PermissionService implements ServiceInterface<IPermission> {
   public permissionModel = DB.permission;
 
   public async index(permissionFilter: PermissionFilter): Promise<IPaginateResponse<IPermission>> {
-    const select = isEmpty(permissionFilter.filed) ? null : permissionFilter.filed;
 
     const {count, rows} = await this.permissionModel.findAndCountAll({
       limit: permissionFilter.limit,
       offset: permissionFilter.page,
       order: [[permissionFilter.sort, permissionFilter.order]],
-      attributes: select,
       where: permissionFilter.whereStatement,
 
     });

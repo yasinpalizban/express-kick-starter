@@ -9,7 +9,6 @@ export class QueryFilter implements QueryFilterInterface {
 
   private _sort: string;
   private _order: string;
-  private _filed: string;
   private _page: number;
   private _limit: number;
   private _foreignKey: number;
@@ -21,7 +20,6 @@ export class QueryFilter implements QueryFilterInterface {
   constructor() {
     this._sort = 'id';
     this._order = 'DESC';
-    this._filed = '';
     this._page = 1;
     this._limit = 10;
     this._foreignKey = 0;
@@ -85,18 +83,6 @@ export class QueryFilter implements QueryFilterInterface {
     return this._order;
   }
 
-  get filed(): string[] {
-    const select: string[] = [];
-
-    this._filed.split(',').forEach(item => {
-      if (item != undefined && item.length > 0) {
-        select.push(item);
-      }
-
-    });
-
-    return select;
-  }
 
   get page(): number {
     return (this._page - 1) * this._limit;

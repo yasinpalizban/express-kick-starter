@@ -4,7 +4,7 @@ import {HttpException} from '../exceptions/HttpException';
 import {isEmpty} from '../utils/is.empty';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
-import {IUser} from '../interfaces/user.interface';
+import {IUser} from '../interfaces/user';
 import {
   EMAIL_FROMEMAIL,
   EMAIL_HOST,
@@ -24,14 +24,14 @@ import {Sms} from '../libraries/sms';
 import {AuthServiceInterface} from '../interfaces/auth.service.interface';
 import {ILogIn} from '../interfaces/log.in.interface';
 import {RoleType} from '../enums/role.type.enum';
-import {IPermission} from '../interfaces/permission.interface';
-import {IPermissionUser} from '../interfaces/permission.user.interface';
-import {IPermissionGroup} from '../interfaces/permission.group.interface';
-import {IGroup} from '../interfaces/group.interface';
+import {IPermission} from '../interfaces/permission';
+import {IPermissionUser} from '../interfaces/permission.user';
+import {IPermissionGroup} from '../interfaces/permission.group';
+import {IGroup} from '../interfaces/group';
 import {authConfig} from '@/configs/auth.config';
 import DB from '@/databases/database';
 import {AuthEntity} from '../entities/auth.entity';
-import {IUserGroup} from '@/interfaces/group.user.interface';
+import {IUserGroup} from '@/interfaces/group.user';
 import {getDateNow} from '@/utils/get.date.now';
 import Sequelize from 'sequelize';
 
@@ -116,9 +116,9 @@ export default class AuthService implements AuthServiceInterface {
 
     const tokenData: TokenData = this.createToken(findUser, entity.remember ?? false);
     const cookie = this.createCookie(tokenData);
-    const permissions: IPermission[] = await this.permissionModel.findAll({where: {active: true}});
+    const permissions: IPermission[] = await this.permissionModel.findAll();
     const permissionUser: IPermissionUser[] = await this.userPermissionModel.findAll({
-      where: {userId: findUser.id},
+      where: { userId: findUser.id},
       attributes: ['id', 'actions', 'userId', 'permissionId', [Sequelize.literal('`PermissionsModel`.`name`'), 'permission']],
       include: [
         {
@@ -227,8 +227,15 @@ export default class AuthService implements AuthServiceInterface {
         email: entity.email,
       },
     });
-    if (!findUser) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotUsername'));
-    if (compareDate(findUser.activeExpires, new Date())) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    if (!findUser) {
+      await this.storeLogAttempts(false, 'active-via-email', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotUsername'));
+    }
+    if (compareDate(findUser.activeExpires, new Date())) {
+      await this.storeLogAttempts(false, 'active-via-email', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    }
+    await this.storeLogAttempts(true, 'active-via-email', entity.login, entity.ip, entity.userAgent, findUser.id);
 
     await this.userModel.update(
       {
@@ -245,7 +252,11 @@ export default class AuthService implements AuthServiceInterface {
     if (isEmpty(entity)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.reject'));
 
     const findUser: IUser = await this.userModel.findOne({where: {email: entity.email}});
-    if (!findUser) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotEmail'));
+    if (!findUser) {
+      await this.storeLogAttempts(false, 'send-active-code-email', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotEmail'));
+    }
+    await this.storeLogAttempts(true, 'send-active-code-email', entity.login, entity.ip, entity.userAgent, findUser.id);
     await this.sendActivationEmail(findUser.email, entity.activeToken);
     await this.userModel.update(entity, {where: {id: findUser.id}});
   }
@@ -255,10 +266,17 @@ export default class AuthService implements AuthServiceInterface {
 
     const isValid = await this.sms.isActivationCodeValid(entity.phone, entity.activeToken);
 
-    if (!isValid) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    if (!isValid) {
+      await this.storeLogAttempts(false, 'active-vis-sms', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    }
 
     const findUser: IUser = await this.userModel.findOne({where: {phone: entity.phone, active: false}});
-    if (!findUser) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotAccount'));
+    if (!findUser){
+      await this.storeLogAttempts(false, 'active-vis-sms', entity.login, entity.ip, entity.userAgent);
+       throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotAccount'));
+    }
+    await this.storeLogAttempts(true, 'active-vis-sms', entity.login, entity.ip, entity.userAgent, findUser.id);
 
     await this.userModel.update(
       {
@@ -275,7 +293,11 @@ export default class AuthService implements AuthServiceInterface {
     if (isEmpty(entity)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.reject'));
 
     const findUser: IUser = await this.userModel.findOne({where: {phone: entity.phone}});
-    if (!findUser) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotAccount'));
+    if (!findUser) {
+      await this.storeLogAttempts(false, 'send-active-via-sms', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotAccount'));
+    }
+    await this.storeLogAttempts(true, 'send-active-via-sms', entity.login, entity.ip, entity.userAgent, findUser.id);
     await this.sms.sendActivationCode(entity.phone, SITE_ADDRESS);
     await this.userModel.update(entity, {where: {id: findUser.id}});
   }
@@ -284,9 +306,16 @@ export default class AuthService implements AuthServiceInterface {
     if (isEmpty(entity)) throw new HttpException(StatusCodes.BAD_REQUEST, i18n.t('api.commons.reject'));
 
     const findUser: IUser = await this.userModel.findOne({where: {email: entity.email, resetToken: entity.resetToken}});
-    if (!findUser) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotAccount'));
-    if (compareDate(findUser.resetExpires, new Date())) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    if (!findUser) {
+      await this.storeLogAttempts(false, 'reset-password-via-email', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.youAreNotAccount'));
+    }
+    if (compareDate(findUser.resetExpires, new Date())) {
+      await this.storeLogAttempts(false, 'reset-password-via-email', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    }
 
+    await this.storeLogAttempts(true, 'reset-password-via-email', entity.login, entity.ip, entity.userAgent, findUser.id);
     await this.userModel.update(
       {
         resetAt: entity.resetAt,
@@ -303,12 +332,19 @@ export default class AuthService implements AuthServiceInterface {
 
     const isValid = await this.sms.isActivationCodeValid(entity.phone, entity.resetToken);
 
-    if (!isValid) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    if (!isValid) {
+      await this.storeLogAttempts(false, 'reset-password-via-sms', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.tokenExpire'));
+    }
 
     const findUser: IUser = await this.userModel.findOne({where: {phone: entity.phone}});
 
-    if (!findUser) throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.yourAreNotPhone'));
+    if (!findUser) {
+      await this.storeLogAttempts(false, 'reset-password-via-sms', entity.login, entity.ip, entity.userAgent);
+      throw new HttpException(StatusCodes.CONFLICT, i18n.t('auth.yourAreNotPhone'));
+    }
 
+    await this.storeLogAttempts(true, 'reset-password-via-sms', entity.login, entity.ip, entity.userAgent, findUser.id);
     await this.userModel.update(
       {
         resetAt: entity.resetAt,
@@ -396,7 +432,7 @@ export default class AuthService implements AuthServiceInterface {
     }
   }
 
-  private async storeLogAttempts(success: boolean, type: string, login: string, ip: string, userAgent: string, userId? = 0) {
+  private async storeLogAttempts(success: boolean, type: string, login: string, ip: string, userAgent: string, userId = 0) {
     await this.ipActivityModel.prototype.keepLimitOfAttempts(authConfig.logAttempt);
     await this.ipActivityModel.create({
       success: success,

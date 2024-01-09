@@ -3,14 +3,14 @@ import { isEmpty } from '../utils/is.empty';
 import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import { UserEntity } from '../entities/user.entity';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user';
 import { ServiceInterface } from '../interfaces/service.interface';
 import { deleteFile } from '../utils/delete.file';
 import { authConfig } from '../configs/auth.config';
 import { sharedConfig } from '../configs/shared.config';
 import DB from '@/databases/database';
 
-export default class ProfileService implements ServiceInterface {
+export default class ProfileService implements ServiceInterface<IUser> {
   public userModel = DB.users;
 
   public async show(id: number): Promise<IUser> {

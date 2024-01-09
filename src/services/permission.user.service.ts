@@ -4,7 +4,7 @@ import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import {ServiceInterface} from '../interfaces/service.interface';
 import {PermissionUserEntity} from '@/entities/permission.user.entity';
-import {IPermissionUser} from '@/interfaces/permission.user.interface';
+import {IPermissionUser} from '@/interfaces/permission.user';
 import DB from '@/databases/database';
 import {Sequelize} from 'sequelize';
 import {PermissionUserFilter} from "@/filters/permission.user.filter";
@@ -12,7 +12,7 @@ import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 import {IPaginateResponse} from "@/interfaces/paginate.response";
 
-export default class PermissionUserService implements ServiceInterface {
+export default class PermissionUserService implements ServiceInterface<IPermissionUser> {
   public permissionUserModel = DB.permissionUser;
   private nestId: number;
 
@@ -29,7 +29,7 @@ export default class PermissionUserService implements ServiceInterface {
 
     const whereCluase = (this.nestId != 0) ? {permissionId: this.nestId} : permissionUserFilter.whereStatement;
 
-    const select = isEmpty(permissionUserFilter.filed) ? [
+    const select =  [
       'id',
       'actions',
       'userId',
@@ -38,8 +38,10 @@ export default class PermissionUserService implements ServiceInterface {
       [Sequelize.literal('`UserModel`.`last_name`'), 'lastName'],
       [Sequelize.literal('`UserModel`.`first_name`'), 'firstName'],
       [Sequelize.literal('`UserModel`.`username`'), 'username'],
-    ] : permissionUserFilter.filed;
+    ];
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const {count, rows} = await this.permissionUserModel.findAndCountAll({
       limit: permissionUserFilter.limit,
       offset: permissionUserFilter.page,

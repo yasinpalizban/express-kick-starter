@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { IGroup } from '../interfaces/group.interface';
+import { IGroup } from '../interfaces/group';
 
 import { UserGroupModel } from './user.group.model';
 

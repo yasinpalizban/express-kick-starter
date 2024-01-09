@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import ApiController from './api.controller';
 import SettingService from '../services/setting.service';
-import { ISetting } from '../interfaces/setting.interface';
+import { ISetting } from '../interfaces/setting';
 import { SettingEntity } from '../entities/setting.entity';
 import {SettingFilter} from "@/filters/setting.filter";
 import {IPaginateResponse} from "@/interfaces/paginate.response";

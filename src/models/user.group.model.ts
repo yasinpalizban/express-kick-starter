@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { IUserGroup } from '../interfaces/group.user.interface';
+import { IUserGroup } from '../interfaces/group.user';
 
 
 export class UserGroupModel extends Model<IUserGroup> implements IUserGroup {

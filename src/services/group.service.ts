@@ -3,7 +3,7 @@ import {isEmpty} from '../utils/is.empty';
 import {StatusCodes} from 'http-status-codes';
 import {default as i18n} from 'i18next';
 import {ServiceInterface} from '../interfaces/service.interface';
-import {IGroup} from '../interfaces/group.interface';
+import {IGroup} from '../interfaces/group';
 import DB from '@/databases/database';
 import {GroupEntity} from '@/entities/group.entity';
 import {GroupFilter} from "@/filters/group.filter";
@@ -11,18 +11,16 @@ import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 import {IPaginateResponse} from "@/interfaces/paginate.response";
 
-export default class GroupService implements ServiceInterface {
+export default class GroupService implements ServiceInterface<IGroup> {
   public groupModel = DB.group;
 
   public async index(groupFilter: GroupFilter): Promise<IPaginateResponse<IGroup>> {
 
-    const select = isEmpty(groupFilter.filed) ? null : groupFilter.filed;
 
     const {count, rows} = await this.groupModel.findAndCountAll({
       limit: groupFilter.limit,
       offset: groupFilter.page,
       order: [[groupFilter.sort, groupFilter.order]],
-      attributes: select,
       where: groupFilter.whereStatement
 
     });

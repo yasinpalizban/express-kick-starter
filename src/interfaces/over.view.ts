@@ -1,5 +1,5 @@
 
-import { IUser } from '@/interfaces/user.interface';
+import { IUser } from '@/interfaces/user';
 
 export interface IOverView {
   userPost?: IUser[];

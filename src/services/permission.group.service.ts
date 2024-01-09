@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { default as i18n } from 'i18next';
 import DB from '@/databases/database';
 import { ServiceInterface } from '../interfaces/service.interface';
-import { IPermissionGroup } from '../interfaces/permission.group.interface';
+import { IPermissionGroup } from '../interfaces/permission.group';
 
 import { PermissionGroupEntity } from '@/entities/permission.group.entity';
 import Sequelize, { Op } from 'sequelize';
@@ -13,7 +13,7 @@ import {IPagination} from "@/interfaces/pagination";
 import {paginationFields} from "@/utils/pagntaion.fields";
 import {IPaginateResponse} from "@/interfaces/paginate.response";
 
-export default class PermissionGroupService implements ServiceInterface {
+export default class PermissionGroupService implements ServiceInterface<IPermissionGroup> {
   public permissionGroupModel = DB.permissionGroup;
   private nestId: number;
 
@@ -30,15 +30,17 @@ export default class PermissionGroupService implements ServiceInterface {
 
     const whereCluase = (this.nestId != 0) ? {permissionId: this.nestId} : permissionGroupFilter.whereStatement;
 
-    const select = isEmpty(permissionGroupFilter.filed) ? [
+    const select = [
       'id',
       'actions',
       'groupId',
       'permissionId',
       [Sequelize.literal('`PermissionsModel`.`name`'), 'permission'],
       [Sequelize.literal('`GroupModel`.`name`'), 'group'],
-    ] : permissionGroupFilter.filed;
+    ];
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const {count, rows} = await this.permissionGroupModel.findAndCountAll({
       limit: permissionGroupFilter.limit,
       offset: permissionGroupFilter.page,

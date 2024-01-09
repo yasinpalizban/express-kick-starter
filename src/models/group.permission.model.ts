@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { IPermissionGroup } from '../interfaces/permission.group.interface';
+import { IPermissionGroup } from '../interfaces/permission.group';
 
 
 export class GroupPermissionsModel extends Model<IPermissionGroup> implements IPermissionGroup {
